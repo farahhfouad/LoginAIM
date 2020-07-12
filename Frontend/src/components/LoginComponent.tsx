@@ -8,7 +8,8 @@ import Logo from '../aim_final_logo.png';
 function Login() {
     const [username, setusername] = useState<string>();
     const [password, setPass] = useState<string>();
-
+    const [userErr, setUserErr] = useState<boolean>(false);
+    const [passErr, setPassErr] = useState<boolean>(false);
 
     function onChange(e: React.ChangeEvent<HTMLInputElement>) {
         if (e.target.name === "user") {
@@ -27,38 +28,57 @@ function Login() {
     const login = (event: React.FormEvent) => {
         event.preventDefault();
         const element = document.getElementById("checkbox") as HTMLInputElement;
-        console.log(`Username: ${username} Password: ${password} Remember Me? ${element.checked}`);
-        let thrown: boolean = false;
-        fetch('http://localhost:8000/getUser', {
-            method: 'POST',
-            body: JSON.stringify({ username, password }),
-            headers: {
-                'Content-Type': 'application/json'
+        const user = document.getElementById("user") as HTMLInputElement;
+        const pass = document.getElementById("pass") as HTMLInputElement;
+        console.log(user.value + " here " + pass.value)
+        if (user.value === "" && pass.value === "") {
+
+            setUserErr(false);
+
+        } else {
+            if (pass.value === "") {
+                setUserErr(false);
+                setPassErr(false);
             }
+            else {
 
-        }).then(res => {
+                console.log(`Username: ${username} Password: ${password} Remember Me? ${element.checked}`);
+                let thrown: boolean = false;
+                fetch('http://localhost:8000/getUser', {
+                    method: 'POST',
+                    body: JSON.stringify({ username, password }),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
 
-            if (res.status === 200) {
-                console.log("SUCCESS" + JSON.stringify(res));
-                alert("Login Succesful ");
+                }).then(res => {
+
+                    if (res.status === 200) {
+                        console.log("SUCCESS" + JSON.stringify(res));
+                        setPassErr(false);
+                        setUserErr(false);
+                        alert("Login Succesful ");
+                    }
+                    if (res.status === 400) {
+                        setPassErr(true);
+                        setUserErr(false);
+                    }
+
+                    if (res.status === 500) {
+                        console.log("error?");
+                        thrown = true;
+                        setUserErr(true);
+                        setPassErr(false);
+
+                    }
+                }).catch(error => {
+
+                    console.log(error + "error")
+
+                });
+
             }
-            if (res.status === 400) {
-
-                alert("Incorrect Password");
-            }
-
-            if (res.status === 500) {
-                console.log("error?");
-                thrown = true;
-                alert("Incorrect Username");
-            }
-        }).catch(error => {
-
-            console.log(error + "error")
-
-        });
-
-
+        }
     }
     const { Title } = Typography;
     return (
@@ -79,19 +99,22 @@ function Login() {
                     wrapperCol={{ span: 14 }}
                     layout="horizontal">
                     <Form.Item justify-content="center" align-items="middle"
-
                         name="username"
-
-                        rules={[{ required: true, message: 'Username Cannot be Empty' }]} className='user'
+                        rules={[{ required: true, message: 'Username Cannot be Empty' }]}
+                        validateStatus={userErr ? "error" : ""}
+                        help={userErr ? "Incorrect Username" : null}
+                        className='user'
                     >
 
-                        <Input name="user" value={username} onChange={onChange} prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" id='uservalue' />
+                        <Input name="user" value={username} onChange={onChange} prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" id="user" />
                     </Form.Item>
 
                     <Form.Item
-
                         name="password"
                         rules={[{ required: true, message: 'Password Cannot be Empty!' }]}
+                        validateStatus={passErr ? "error" : ""}
+                        help={passErr ? "Incorrect Password" : null}
+
                     >
 
                         <Input.Password prefix={<LockOutlined className="site-form-item-icon" />}
