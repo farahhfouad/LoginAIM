@@ -13,16 +13,13 @@ function Login() {
 
     function onChange(e: React.ChangeEvent<HTMLInputElement>) {
         if (e.target.name === "user") {
-
             setusername(e.target.value);
         }
         else {
-
             setPass(e.target.value);
         }
 
     }
-
 
 
     const login = (event: React.FormEvent) => {
@@ -30,12 +27,11 @@ function Login() {
         const element = document.getElementById("checkbox") as HTMLInputElement;
         const user = document.getElementById("user") as HTMLInputElement;
         const pass = document.getElementById("pass") as HTMLInputElement;
-        console.log(user.value + " here " + pass.value)
+
         if (user.value === "" && pass.value === "") {
-
             setUserErr(false);
-
-        } else {
+        }
+        else {
             if (pass.value === "") {
                 setUserErr(false);
                 setPassErr(false);
@@ -54,7 +50,6 @@ function Login() {
                 }).then(res => {
 
                     if (res.status === 200) {
-                        console.log("SUCCESS" + JSON.stringify(res));
                         setPassErr(false);
                         setUserErr(false);
                         alert("Login Succesful ");
@@ -65,16 +60,13 @@ function Login() {
                     }
 
                     if (res.status === 500) {
-                        console.log("error?");
                         thrown = true;
                         setUserErr(true);
                         setPassErr(false);
 
                     }
                 }).catch(error => {
-
                     console.log(error + "error")
-
                 });
 
             }
@@ -85,26 +77,27 @@ function Login() {
 
 
         <Row align="middle" className="row" >
-            <Col lg={12} sm={24} md={24} xs={24}  >
+            <Col lg={12} sm={24} md={24} xs={24}>
 
                 <img src={Logo} alt="Logo" className="logo" />
 
             </Col >
 
-            <Col lg={12} sm={24} md={24} xs={24} className="divider"
-            >
-                <Title id="title" level={2}>Welcome Back!</Title>
+            <Col lg={12} sm={24} md={24} xs={24} className="divider">
+                <Title id="title" level={2}>
+                    Welcome Back!
+                </Title>
 
                 <Form onSubmitCapture={login} className="form" labelCol={{ span: 4 }}
                     wrapperCol={{ span: 14 }}
                     layout="horizontal">
+
                     <Form.Item justify-content="center" align-items="middle"
                         name="username"
                         rules={[{ required: true, message: 'Username Cannot be Empty' }]}
                         validateStatus={userErr ? "error" : ""}
                         help={userErr ? "Incorrect Username" : null}
-                        className='user'
-                    >
+                        className='user'>
 
                         <Input name="user" value={username} onChange={onChange} prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" id="user" />
                     </Form.Item>
@@ -113,9 +106,7 @@ function Login() {
                         name="password"
                         rules={[{ required: true, message: 'Password Cannot be Empty!' }]}
                         validateStatus={passErr ? "error" : ""}
-                        help={passErr ? "Incorrect Password" : null}
-
-                    >
+                        help={passErr ? "Incorrect Password" : null}>
 
                         <Input.Password prefix={<LockOutlined className="site-form-item-icon" />}
                             type="password"
@@ -127,19 +118,14 @@ function Login() {
                     </Form.Item>
 
 
-                    <Form.Item >
-                        <Button type="primary" htmlType="submit" shape="round" size="large" className="button" >
+                    <Form.Item>
+                        <Button type="primary" htmlType="submit" shape="round" size="large" className="button">
                             Sign In
-        </Button>
-
-
+                         </Button>
                     </Form.Item>
                 </Form>
             </Col>
-        </Row >
-
-
-        // </div>
+        </Row>
 
     )
 

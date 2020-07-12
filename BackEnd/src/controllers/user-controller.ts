@@ -39,7 +39,7 @@ export let RegUser = (req: Request, res: Response) => {
 
         }
         else {
-            console.log("here>  " + result.length);
+
             return res.send({ message: "Email Already Exists" });
 
         }
@@ -51,13 +51,13 @@ export let RegUser = (req: Request, res: Response) => {
 
 export let getUser = (req: Request, res: Response) => {
     let Rep: UserRepo = new UserRepo();
-    console.log("Get Request recieved" + JSON.stringify(req.body));
+    console.log("Get User Request recieved" + JSON.stringify(req.body));
     Rep.getUser(req.body.username).then((result: any) => {
-        console.log(result);
+
         if (result.length > 0) {
             bcrypt.compare(req.body.password, result[0].password, (error, response) => {
                 if (error) {
-                    console.log("ERROR IN BCRYPT");
+
                     return res.status(401).send('ERROR IN BCRYPT');;
                 }
                 if (response) {
@@ -66,11 +66,8 @@ export let getUser = (req: Request, res: Response) => {
                         {
                             expiresIn: "1h"
                         });
-
-                    console.log("GOOD!");
                     return res.send({ message: "SIGN IN SUCCESSFUL", token: token });
                 }
-                console.log("NO MATCH!");
                 return res.status(400).send('Not a Match');
             })
         }
