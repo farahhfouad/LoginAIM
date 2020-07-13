@@ -6,7 +6,7 @@ export let dbOptions: ConnectionOptions = {
     host: "localhost",
     port: 3306,
     username: "root",
-    password: "fayoub1999",
+    password: "****",
     database: "AIM",
     entities: [
         "./entities/*.js"

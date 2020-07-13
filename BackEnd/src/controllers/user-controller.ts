@@ -40,7 +40,7 @@ export let RegUser = (req: Request, res: Response) => {
         }
         else {
 
-            return res.send({ message: "Email Already Exists" });
+            return res.send({ message: "Username Already Exists" });
 
         }
 
